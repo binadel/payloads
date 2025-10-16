@@ -1,15 +1,13 @@
 package optional
 
 import (
-	"fmt"
-
 	"github.com/mailru/easyjson"
 	"github.com/mailru/easyjson/jlexer"
 	"github.com/mailru/easyjson/jwriter"
 )
 
 // Object is an optional object type for providing optional semantics.
-// The generic argument should be of type pointer to any struct
+// The generic argument should be of type any struct
 // that implements easyjson marshaler and unmarshaler interfaces.
 type Object[T easyjson.MarshalerUnmarshaler] struct {
 	isDefined bool
@@ -30,11 +28,7 @@ func (v *Object[T]) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Object[T]) MarshalEasyJSON(w *jwriter.Writer) {
-	if any(v.Value) == nil {
-		w.RawString("null")
-	} else {
-		v.Value.MarshalEasyJSON(w)
-	}
+	v.Value.MarshalEasyJSON(w)
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -59,12 +53,4 @@ func (v *Object[T]) UnmarshalJSON(data []byte) error {
 	l := jlexer.Lexer{Data: data}
 	v.UnmarshalEasyJSON(&l)
 	return l.Error()
-}
-
-// String implements a stringer interface using fmt.Sprint for the value.
-func (v Object[T]) String() string {
-	if !v.isDefined {
-		return "<undefined>"
-	}
-	return fmt.Sprint(v.Value)
 }

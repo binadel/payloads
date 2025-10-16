@@ -1,8 +1,6 @@
 package nullable
 
 import (
-	"fmt"
-
 	"github.com/mailru/easyjson/jlexer"
 	"github.com/mailru/easyjson/jwriter"
 )
@@ -52,12 +50,4 @@ func (v *UInt64) UnmarshalJSON(data []byte) error {
 	l := jlexer.Lexer{Data: data}
 	v.UnmarshalEasyJSON(&l)
 	return l.Error()
-}
-
-// String implements a stringer interface using fmt.Sprint for the value.
-func (v UInt64) String() string {
-	if !v.IsPresent {
-		return "<null>"
-	}
-	return fmt.Sprint(v.Value)
 }

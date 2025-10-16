@@ -1,8 +1,6 @@
 package optional
 
 import (
-	"fmt"
-
 	"github.com/mailru/easyjson/jlexer"
 	"github.com/mailru/easyjson/jwriter"
 )
@@ -10,7 +8,6 @@ import (
 // {{.TypeName}} is an optional {{.GoType}} type for providing optional semantics without using pointers.
 type {{.TypeName}} struct {
 	isDefined bool
-	IsPresent bool
 	Value     {{.GoType}}
 }
 
@@ -28,11 +25,7 @@ func (v *{{.TypeName}}) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v {{.TypeName}}) MarshalEasyJSON(w *jwriter.Writer) {
-	if v.IsPresent {
-		w.{{.WriterMethod}}(v.Value)
-	} else {
-		w.RawString("null")
-	}
+	w.{{.WriterMethod}}(v.Value)
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -42,7 +35,6 @@ func (v *{{.TypeName}}) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = {{.TypeName}}{}
 	} else {
 		v.Value = l.{{.LexerMethod}}()
-		v.IsPresent = true
 	}
 }
 
@@ -58,15 +50,4 @@ func (v *{{.TypeName}}) UnmarshalJSON(data []byte) error {
 	l := jlexer.Lexer{Data: data}
 	v.UnmarshalEasyJSON(&l)
 	return l.Error()
-}
-
-// String implements a stringer interface using fmt.Sprint for the value.
-func (v {{.TypeName}}) String() string {
-	if !v.isDefined {
-		return "<undefined>"
-	}
-	if !v.IsPresent {
-		return "<null>"
-	}
-	return fmt.Sprint(v.Value)
 }

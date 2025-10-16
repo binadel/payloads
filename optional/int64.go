@@ -1,8 +1,6 @@
 package optional
 
 import (
-	"fmt"
-
 	"github.com/mailru/easyjson/jlexer"
 	"github.com/mailru/easyjson/jwriter"
 )
@@ -10,7 +8,6 @@ import (
 // Int64 is an optional int64 type for providing optional semantics without using pointers.
 type Int64 struct {
 	isDefined bool
-	IsPresent bool
 	Value     int64
 }
 
@@ -28,11 +25,7 @@ func (v *Int64) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Int64) MarshalEasyJSON(w *jwriter.Writer) {
-	if v.IsPresent {
-		w.Int64(v.Value)
-	} else {
-		w.RawString("null")
-	}
+	w.Int64(v.Value)
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -42,7 +35,6 @@ func (v *Int64) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = Int64{}
 	} else {
 		v.Value = l.Int64()
-		v.IsPresent = true
 	}
 }
 
@@ -58,15 +50,4 @@ func (v *Int64) UnmarshalJSON(data []byte) error {
 	l := jlexer.Lexer{Data: data}
 	v.UnmarshalEasyJSON(&l)
 	return l.Error()
-}
-
-// String implements a stringer interface using fmt.Sprint for the value.
-func (v Int64) String() string {
-	if !v.isDefined {
-		return "<undefined>"
-	}
-	if !v.IsPresent {
-		return "<null>"
-	}
-	return fmt.Sprint(v.Value)
 }
