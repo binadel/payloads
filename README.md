@@ -1,2 +1,2 @@
 # payloads
-Common payload types of APIs.
+Common payload types for APIs.
