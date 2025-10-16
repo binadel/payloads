@@ -1,4 +1,4 @@
-package nullable
+package optional
 
 import (
 	"fmt"
@@ -7,8 +7,9 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// String is a nullable string type for providing optional semantics without using pointers.
+// String is an optional string type for providing optional semantics without using pointers.
 type String struct {
+	isDefined bool
 	IsPresent bool
 	Value     string
 }
@@ -17,7 +18,12 @@ type String struct {
 // It is used by easyjson when the field has omitempty tag,
 // to decide whether to include the field or not.
 func (v String) IsDefined() bool {
-	return v.IsPresent
+	return v.isDefined
+}
+
+// SetDefined sets the isDefined to true.
+func (v *String) SetDefined() {
+	v.isDefined = true
 }
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
@@ -56,6 +62,9 @@ func (v *String) UnmarshalJSON(data []byte) error {
 
 // String implements a stringer interface using fmt.Sprint for the value.
 func (v String) String() string {
+	if !v.isDefined {
+		return "<undefined>"
+	}
 	if !v.IsPresent {
 		return "<null>"
 	}

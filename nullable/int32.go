@@ -7,7 +7,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int32 is an optional int32 type for providing optional semantics without using pointers.
+// Int32 is a nullable int32 type for providing optional semantics without using pointers.
 type Int32 struct {
 	IsPresent bool
 	Value     int32

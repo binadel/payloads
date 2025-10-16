@@ -7,7 +7,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt is an optional uint type for providing optional semantics without using pointers.
+// UInt is a nullable uint type for providing optional semantics without using pointers.
 type UInt struct {
 	IsPresent bool
 	Value     uint

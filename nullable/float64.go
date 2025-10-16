@@ -7,7 +7,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Float64 is an optional float64 type for providing optional semantics without using pointers.
+// Float64 is a nullable float64 type for providing optional semantics without using pointers.
 type Float64 struct {
 	IsPresent bool
 	Value     float64

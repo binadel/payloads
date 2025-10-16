@@ -7,7 +7,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// {{.TypeName}} is an optional {{.GoType}} type for providing optional semantics without using pointers.
+// {{.TypeName}} is a nullable {{.GoType}} type for providing optional semantics without using pointers.
 type {{.TypeName}} struct {
 	IsPresent bool
 	Value     {{.GoType}}
