@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int32Array is an optional array of int32 for providing optional semantics without using pointers.
+// Int32Array is an optional array of int32 that provides optional semantics without using pointers.
 type Int32Array struct {
 	isDefined bool
 	Value     []int32

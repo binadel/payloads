@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int64Array is an optional array of int64 for providing optional semantics without using pointers.
+// Int64Array is an optional array of int64 that provides optional semantics without using pointers.
 type Int64Array struct {
 	isDefined bool
 	Value     []int64

@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// IntArray is an optional array of int for providing optional semantics without using pointers.
+// IntArray is an optional array of int that provides optional semantics without using pointers.
 type IntArray struct {
 	isDefined bool
 	Value     []int

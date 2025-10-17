@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int8Array is an optional array of int8 for providing optional semantics without using pointers.
+// Int8Array is an optional array of int8 that provides optional semantics without using pointers.
 type Int8Array struct {
 	isDefined bool
 	Value     []int8

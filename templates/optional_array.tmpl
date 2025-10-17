@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// {{.TypeName}}Array is an optional array of {{.GoType}} for providing optional semantics without using pointers.
+// {{.TypeName}}Array is an optional array of {{.GoType}} that provides optional semantics without using pointers.
 type {{.TypeName}}Array struct {
 	isDefined bool
 	Value     []{{.GoType}}
@@ -25,14 +25,14 @@ func (v *{{.TypeName}}Array) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v {{.TypeName}}Array) MarshalEasyJSON(w *jwriter.Writer) {
-    w.RawByte('[')
-    for i, item := range v.Value {
-        if i > 0 {
-            w.RawByte(',')
-        }
-        w.{{.WriterMethod}}(item)
-    }
-    w.RawByte(']')
+	w.RawByte('[')
+	for i, item := range v.Value {
+		if i > 0 {
+			w.RawByte(',')
+		}
+		w.{{.WriterMethod}}(item)
+	}
+	w.RawByte(']')
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -41,19 +41,19 @@ func (v *{{.TypeName}}Array) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Skip()
 		*v = {{.TypeName}}Array{}
 	} else {
-        v.Value = make([]{{.GoType}}, 0)
+		v.Value = make([]{{.GoType}}, 0)
 		l.Delim('[')
-        for !l.IsDelim(']') {
-            var item {{.GoType}}
-            if l.IsNull() {
-                l.Skip()
-            } else {
-                item = l.{{.LexerMethod}}()
-            }
-            v.Value = append(v.Value, item)
-            l.WantComma()
-        }
-        l.Delim(']')
+		for !l.IsDelim(']') {
+			var item {{.GoType}}
+			if l.IsNull() {
+				l.Skip()
+			} else {
+				item = l.{{.LexerMethod}}()
+			}
+			v.Value = append(v.Value, item)
+			l.WantComma()
+		}
+		l.Delim(']')
 	}
 }
 

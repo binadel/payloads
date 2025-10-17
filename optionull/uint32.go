@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt32 is an optional and nullable uint32 type for providing optional semantics without using pointers.
+// UInt32 is an optional and nullable uint32 type that provides optional semantics without using pointers.
 type UInt32 struct {
 	isDefined bool
 	IsPresent bool

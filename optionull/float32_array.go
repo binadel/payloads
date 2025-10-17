@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Float32Array is an optional array of float32 for providing optional semantics without using pointers.
+// Float32Array is an optional array of float32 that provides optional semantics without using pointers.
 type Float32Array struct {
 	isDefined bool
 	Value     []float32

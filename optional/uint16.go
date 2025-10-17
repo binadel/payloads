@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt16 is an optional uint16 type for providing optional semantics without using pointers.
+// UInt16 is an optional uint16 type that provides optional semantics without using pointers.
 type UInt16 struct {
 	isDefined bool
 	Value     uint16

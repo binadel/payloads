@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UIntArray is an optional array of uint for providing optional semantics without using pointers.
+// UIntArray is an optional array of uint that provides optional semantics without using pointers.
 type UIntArray struct {
 	isDefined bool
 	Value     []uint

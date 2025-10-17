@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int is an optional and nullable int type for providing optional semantics without using pointers.
+// Int is an optional and nullable int type that provides optional semantics without using pointers.
 type Int struct {
 	isDefined bool
 	IsPresent bool

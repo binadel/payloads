@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// StringArray is an optional array of string for providing optional semantics without using pointers.
+// StringArray is an optional array of string that provides optional semantics without using pointers.
 type StringArray struct {
 	isDefined bool
 	Value     []string

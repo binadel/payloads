@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int16Array is an optional array of int16 for providing optional semantics without using pointers.
+// Int16Array is an optional array of int16 that provides optional semantics without using pointers.
 type Int16Array struct {
 	isDefined bool
 	Value     []int16

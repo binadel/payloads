@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt32Array is an optional array of uint32 for providing optional semantics without using pointers.
+// UInt32Array is an optional array of uint32 that provides optional semantics without using pointers.
 type UInt32Array struct {
 	isDefined bool
 	Value     []uint32

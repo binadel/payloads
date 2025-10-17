@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Float32 is an optional and nullable float32 type for providing optional semantics without using pointers.
+// Float32 is an optional and nullable float32 type that provides optional semantics without using pointers.
 type Float32 struct {
 	isDefined bool
 	IsPresent bool

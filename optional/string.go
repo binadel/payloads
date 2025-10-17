@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// String is an optional string type for providing optional semantics without using pointers.
+// String is an optional string type that provides optional semantics without using pointers.
 type String struct {
 	isDefined bool
 	Value     string

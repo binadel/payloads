@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt8 is an optional uint8 type for providing optional semantics without using pointers.
+// UInt8 is an optional uint8 type that provides optional semantics without using pointers.
 type UInt8 struct {
 	isDefined bool
 	Value     uint8

@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Float64Array is an optional array of float64 for providing optional semantics without using pointers.
+// Float64Array is an optional array of float64 that provides optional semantics without using pointers.
 type Float64Array struct {
 	isDefined bool
 	Value     []float64

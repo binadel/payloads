@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt64 is an optional uint64 type for providing optional semantics without using pointers.
+// UInt64 is an optional uint64 type that provides optional semantics without using pointers.
 type UInt64 struct {
 	isDefined bool
 	Value     uint64

@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int16 is an optional int16 type for providing optional semantics without using pointers.
+// Int16 is an optional int16 type that provides optional semantics without using pointers.
 type Int16 struct {
 	isDefined bool
 	Value     int16

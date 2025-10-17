@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt16Array is an optional array of uint16 for providing optional semantics without using pointers.
+// UInt16Array is an optional array of uint16 that provides optional semantics without using pointers.
 type UInt16Array struct {
 	isDefined bool
 	Value     []uint16

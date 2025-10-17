@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt64Array is an optional array of uint64 for providing optional semantics without using pointers.
+// UInt64Array is an optional array of uint64 that provides optional semantics without using pointers.
 type UInt64Array struct {
 	isDefined bool
 	Value     []uint64

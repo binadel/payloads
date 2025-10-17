@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// BoolArray is an optional array of bool for providing optional semantics without using pointers.
+// BoolArray is an optional array of bool that provides optional semantics without using pointers.
 type BoolArray struct {
 	isDefined bool
 	Value     []bool

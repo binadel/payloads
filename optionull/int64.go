@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int64 is an optional and nullable int64 type for providing optional semantics without using pointers.
+// Int64 is an optional and nullable int64 type that provides optional semantics without using pointers.
 type Int64 struct {
 	isDefined bool
 	IsPresent bool

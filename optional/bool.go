@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Bool is an optional bool type for providing optional semantics without using pointers.
+// Bool is an optional bool type that provides optional semantics without using pointers.
 type Bool struct {
 	isDefined bool
 	Value     bool
