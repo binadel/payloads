@@ -1,14 +1,12 @@
 package optional
 
 import (
-	"fmt"
-
 	"github.com/mailru/easyjson"
 	"github.com/mailru/easyjson/jlexer"
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Object is an optional and nullable object type for providing optional semantics.
+// Object is an optional and nullable object container for providing optional semantics.
 // The generic argument should be of type pointer to any struct
 // that implements easyjson marshaler and unmarshaler interfaces.
 type Object[T easyjson.MarshalerUnmarshaler] struct {
@@ -46,9 +44,7 @@ func (v *Object[T]) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	} else {
 		if any(v.Value) == nil {
 			if v.New == nil {
-				l.AddError(fmt.Errorf("optional.Object: Value is nil and New is not set"))
-				l.Skip()
-				return
+				panic("Cannot instantiate Object[T] from nil constructor, use New to define the constructor")
 			}
 			v.Value = v.New()
 		}

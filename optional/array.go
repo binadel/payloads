@@ -1,8 +1,6 @@
 package optional
 
 import (
-	"fmt"
-
 	"github.com/mailru/easyjson"
 	"github.com/mailru/easyjson/jlexer"
 	"github.com/mailru/easyjson/jwriter"
@@ -51,27 +49,19 @@ func (v *Array[T]) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Skip()
 		*v = Array[T]{}
 	} else {
-		l.Delim('[')
 		v.Value = make([]T, 0)
+		l.Delim('[')
 		for !l.IsDelim(']') {
+			if v.New == nil {
+				panic("Cannot instantiate item for Array[T] from nil constructor, use New to define the constructor")
+			}
+			item := v.New()
 			if l.IsNull() {
-				// Skip null elements entirely
-				l.Skip()
-				l.WantComma()
-				continue
-			}
-
-			var item T
-			if v.New != nil {
-				item = v.New()
-			}
-			if any(item) == nil {
-				l.AddError(fmt.Errorf("optional.Array: element is nil and New is not set"))
 				l.Skip()
 			} else {
 				item.UnmarshalEasyJSON(l)
-				v.Value = append(v.Value, item)
 			}
+			v.Value = append(v.Value, item)
 			l.WantComma()
 		}
 		l.Delim(']')

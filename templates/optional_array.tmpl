@@ -1,12 +1,11 @@
 package optional
 
 import (
-    "fmt"
 	"github.com/mailru/easyjson/jlexer"
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// {{.TypeName}}Array is an optional array of {{.GoType}} that provides optional semantics.
+// {{.TypeName}}Array is an optional container for array of {{.GoType}} that provides optional semantics.
 type {{.TypeName}}Array struct {
 	isDefined bool
 	Value     []{{.GoType}}
@@ -49,13 +48,13 @@ func (v *{{.TypeName}}Array) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		v.Value = make([]{{.GoType}}, 0)
 		l.Delim('[')
 		for !l.IsDelim(']') {
-            if l.IsNull() {
-                l.AddError(fmt.Errorf("optional.{{.TypeName}}Array: null element encountered"))
-                l.Skip()
-            } else {
-            	item := l.{{.LexerMethod}}()
-                v.Value = append(v.Value, item)
-            }
+			var item {{.GoType}}
+			if l.IsNull() {
+				l.Skip()
+			} else {
+				item = l.{{.LexerMethod}}()
+			}
+			v.Value = append(v.Value, item)
 			l.WantComma()
 		}
 		l.Delim(']')
