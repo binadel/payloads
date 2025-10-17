@@ -1,6 +1,7 @@
 package optional
 
 import (
+	"fmt"
 	"github.com/mailru/easyjson/jlexer"
 	"github.com/mailru/easyjson/jwriter"
 )
@@ -48,13 +49,13 @@ func (v *Float32Array) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		v.Value = make([]float32, 0)
 		l.Delim('[')
 		for !l.IsDelim(']') {
-			var item float32
 			if l.IsNull() {
+				l.AddError(fmt.Errorf("optional.Float32Array: null element encountered"))
 				l.Skip()
 			} else {
-				item = l.Float32()
+				item := l.Float32()
+				v.Value = append(v.Value, item)
 			}
-			v.Value = append(v.Value, item)
 			l.WantComma()
 		}
 		l.Delim(']')

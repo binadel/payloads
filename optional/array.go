@@ -1,6 +1,8 @@
 package optional
 
 import (
+	"fmt"
+
 	"github.com/mailru/easyjson"
 	"github.com/mailru/easyjson/jlexer"
 	"github.com/mailru/easyjson/jwriter"
@@ -12,6 +14,7 @@ import (
 type Array[T easyjson.MarshalerUnmarshaler] struct {
 	isDefined bool
 	Value     []T
+	New       func() T
 }
 
 // IsDefined returns whether the value is defined.
@@ -51,13 +54,24 @@ func (v *Array[T]) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Delim('[')
 		v.Value = make([]T, 0)
 		for !l.IsDelim(']') {
-			var item T
 			if l.IsNull() {
+				// Skip null elements entirely
+				l.Skip()
+				l.WantComma()
+				continue
+			}
+
+			var item T
+			if v.New != nil {
+				item = v.New()
+			}
+			if any(item) == nil {
+				l.AddError(fmt.Errorf("optional.Array: element is nil and New is not set"))
 				l.Skip()
 			} else {
 				item.UnmarshalEasyJSON(l)
+				v.Value = append(v.Value, item)
 			}
-			v.Value = append(v.Value, item)
 			l.WantComma()
 		}
 		l.Delim(']')
