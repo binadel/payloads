@@ -5,20 +5,18 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// IntArray is an optional array of int that provides optional semantics.
+// IntArray is a container for int slice type that provides optional semantics without using pointers.
 type IntArray struct {
 	isDefined bool
 	Value     []int
 }
 
-// IsDefined returns whether the value is defined.
-// It is used by easyjson when the field has omitempty tag,
-// to decide whether to include the field or not.
+// IsDefined determines whether this field should be included in the json output, if it has the omitempty tag.
 func (v IntArray) IsDefined() bool {
 	return v.isDefined
 }
 
-// SetDefined sets the isDefined to true.
+// SetDefined sets the field to defined, see IsDefined.
 func (v *IntArray) SetDefined() {
 	v.isDefined = true
 }

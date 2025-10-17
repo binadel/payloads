@@ -5,20 +5,18 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt64Array is an optional array of uint64 that provides optional semantics.
+// UInt64Array is a container for uint64 slice type that provides optional semantics without using pointers.
 type UInt64Array struct {
 	isDefined bool
 	Value     []uint64
 }
 
-// IsDefined returns whether the value is defined.
-// It is used by easyjson when the field has omitempty tag,
-// to decide whether to include the field or not.
+// IsDefined determines whether this field should be included in the json output, if it has the omitempty tag.
 func (v UInt64Array) IsDefined() bool {
 	return v.isDefined
 }
 
-// SetDefined sets the isDefined to true.
+// SetDefined sets the field to defined, see IsDefined.
 func (v *UInt64Array) SetDefined() {
 	v.isDefined = true
 }
