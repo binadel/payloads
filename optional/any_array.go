@@ -14,9 +14,9 @@ func (v AnyArray[T]) IsDefined() bool {
 	return v.isDefined
 }
 
-// SetDefined sets the field to defined, see IsDefined.
-func (v *AnyArray[T]) SetDefined() {
-	v.isDefined = true
+// SetDefined is the setter for isDefined, see IsDefined.
+func (v *AnyArray[T]) SetDefined(isDefined bool) {
+	v.isDefined = isDefined
 }
 
 // MarshalJSON implements a standard json marshaler interface.
