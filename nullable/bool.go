@@ -18,6 +18,21 @@ func (v Bool) IsDefined() bool {
 	return v.IsPresent
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v Bool) Get(value bool) bool {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *Bool) Set(value bool) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Bool) MarshalEasyJSON(w *jwriter.Writer) {
 	if v.IsPresent {
@@ -33,8 +48,8 @@ func (v *Bool) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Skip()
 		*v = Bool{}
 	} else {
-		v.Value = l.Bool()
 		v.IsPresent = true
+		v.Value = l.Bool()
 	}
 }
 

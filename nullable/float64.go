@@ -18,6 +18,21 @@ func (v Float64) IsDefined() bool {
 	return v.IsPresent
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v Float64) Get(value float64) float64 {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *Float64) Set(value float64) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Float64) MarshalEasyJSON(w *jwriter.Writer) {
 	if v.IsPresent {
@@ -33,8 +48,8 @@ func (v *Float64) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Skip()
 		*v = Float64{}
 	} else {
-		v.Value = l.Float64()
 		v.IsPresent = true
+		v.Value = l.Float64()
 	}
 }
 

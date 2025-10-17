@@ -13,7 +13,6 @@ type PrimitiveTemplateParams struct {
 func main() {
 	generateNullableTypes()
 	generateOptionalTypes()
-	generateOptionullTypes()
 }
 
 func getPrimitiveTemplateArgs() []PrimitiveTemplateParams {
@@ -71,30 +70,6 @@ func generateOptionalTypes() {
 	for _, t := range types {
 		typeName := strings.ToLower(t.TypeName)
 		file, _ := os.Create("optional/" + typeName + "_array.go")
-		if err := arrayTmpl.Execute(file, t); err != nil {
-			panic(err)
-		}
-		_ = file.Close()
-	}
-}
-
-func generateOptionullTypes() {
-	types := getPrimitiveTemplateArgs()
-
-	tmpl := template.Must(template.ParseFiles("templates/optionull.tmpl"))
-	for _, t := range types {
-		typeName := strings.ToLower(t.TypeName)
-		file, _ := os.Create("optionull/" + typeName + ".go")
-		if err := tmpl.Execute(file, t); err != nil {
-			panic(err)
-		}
-		_ = file.Close()
-	}
-
-	arrayTmpl := template.Must(template.ParseFiles("templates/optionull_array.tmpl"))
-	for _, t := range types {
-		typeName := strings.ToLower(t.TypeName)
-		file, _ := os.Create("optionull/" + typeName + "_array.go")
 		if err := arrayTmpl.Execute(file, t); err != nil {
 			panic(err)
 		}
