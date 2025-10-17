@@ -35,7 +35,11 @@ func (v Array[T]) MarshalEasyJSON(w *jwriter.Writer) {
 			if i > 0 {
 				w.RawByte(',')
 			}
-			item.MarshalEasyJSON(w)
+			if any(item) == nil {
+				w.RawString("null")
+			} else {
+				item.MarshalEasyJSON(w)
+			}
 		}
 		w.RawByte(']')
 	}
