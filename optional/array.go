@@ -47,16 +47,17 @@ func (v *Array[T]) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Skip()
 		*v = Array[T]{}
 	} else {
-		if v.New == nil {
-			panic("Cannot instantiate generic type from nil constructor, set New function to define the constructor")
-		}
 		v.Value = make([]T, 0)
 		l.Delim('[')
 		for !l.IsDelim(']') {
-			item := v.New()
+			var item T
 			if l.IsNull() {
 				l.Skip()
 			} else {
+				if v.New == nil {
+					panic("Cannot instantiate generic type from nil constructor, set New function to define the constructor")
+				}
+				item = v.New()
 				item.UnmarshalEasyJSON(l)
 			}
 			v.Value = append(v.Value, item)
