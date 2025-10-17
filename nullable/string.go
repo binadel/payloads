@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// String is a nullable string type for providing optional semantics without using pointers.
+// String is a nullable string type that provides optional semantics without using pointers.
 type String struct {
 	IsPresent bool
 	Value     string

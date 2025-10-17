@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int8 is a nullable int8 type for providing optional semantics without using pointers.
+// Int8 is a nullable int8 type that provides optional semantics without using pointers.
 type Int8 struct {
 	IsPresent bool
 	Value     int8
