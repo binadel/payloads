@@ -5,20 +5,18 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt16 is a nullable uint16 type that provides optional semantics without using pointers.
+// UInt16 is a container for uint16 type that provides nullable semantics without using pointers.
 type UInt16 struct {
 	IsPresent bool
 	Value     uint16
 }
 
-// IsDefined returns whether the value is defined.
-// It is used by easyjson when the field has omitempty tag,
-// to decide whether to include the field or not.
+// IsDefined determines whether this field should be included in the json output, if it has the omitempty tag.
 func (v UInt16) IsDefined() bool {
 	return v.IsPresent
 }
 
-// Get returns the value if not null; otherwise returns the default given.
+// Get returns the value if it is not null, otherwise it returns the given default value.
 func (v UInt16) Get(value uint16) uint16 {
 	if v.IsPresent {
 		return v.Value

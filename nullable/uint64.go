@@ -5,20 +5,18 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt64 is a nullable uint64 type that provides optional semantics without using pointers.
+// UInt64 is a container for uint64 type that provides nullable semantics without using pointers.
 type UInt64 struct {
 	IsPresent bool
 	Value     uint64
 }
 
-// IsDefined returns whether the value is defined.
-// It is used by easyjson when the field has omitempty tag,
-// to decide whether to include the field or not.
+// IsDefined determines whether this field should be included in the json output, if it has the omitempty tag.
 func (v UInt64) IsDefined() bool {
 	return v.IsPresent
 }
 
-// Get returns the value if not null; otherwise returns the default given.
+// Get returns the value if it is not null, otherwise it returns the given default value.
 func (v UInt64) Get(value uint64) uint64 {
 	if v.IsPresent {
 		return v.Value
