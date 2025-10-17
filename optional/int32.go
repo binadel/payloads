@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int32 is an optional int32 type that provides optional semantics without using pointers.
+// Int32 is an optional and nullable int32 type that provides optional semantics without using pointers.
 type Int32 struct {
 	isDefined bool
+	IsPresent bool
 	Value     int32
 }
 
@@ -23,9 +24,28 @@ func (v *Int32) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v Int32) Get(value int32) int32 {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *Int32) Set(value int32) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Int32) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Int32(v.Value)
+	if v.IsPresent {
+		w.Int32(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *Int32) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = Int32{}
 	} else {
 		v.Value = l.Int32()
+		v.IsPresent = true
 	}
 }
 

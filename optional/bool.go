@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Bool is an optional bool type that provides optional semantics without using pointers.
+// Bool is an optional and nullable bool type that provides optional semantics without using pointers.
 type Bool struct {
 	isDefined bool
+	IsPresent bool
 	Value     bool
 }
 
@@ -23,9 +24,28 @@ func (v *Bool) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v Bool) Get(value bool) bool {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *Bool) Set(value bool) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Bool) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Bool(v.Value)
+	if v.IsPresent {
+		w.Bool(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *Bool) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = Bool{}
 	} else {
 		v.Value = l.Bool()
+		v.IsPresent = true
 	}
 }
 

@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Float32 is an optional float32 type that provides optional semantics without using pointers.
+// Float32 is an optional and nullable float32 type that provides optional semantics without using pointers.
 type Float32 struct {
 	isDefined bool
+	IsPresent bool
 	Value     float32
 }
 
@@ -23,9 +24,28 @@ func (v *Float32) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v Float32) Get(value float32) float32 {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *Float32) Set(value float32) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Float32) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Float32(v.Value)
+	if v.IsPresent {
+		w.Float32(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *Float32) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = Float32{}
 	} else {
 		v.Value = l.Float32()
+		v.IsPresent = true
 	}
 }
 

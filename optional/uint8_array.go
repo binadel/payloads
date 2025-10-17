@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt8Array is an optional array of uint8 that provides optional semantics without using pointers.
+// UInt8Array is an optional array of uint8 that provides optional semantics.
 type UInt8Array struct {
 	isDefined bool
 	Value     []uint8
@@ -25,14 +25,18 @@ func (v *UInt8Array) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v UInt8Array) MarshalEasyJSON(w *jwriter.Writer) {
-	w.RawByte('[')
-	for i, item := range v.Value {
-		if i > 0 {
-			w.RawByte(',')
+	if v.Value == nil {
+		w.RawString("null")
+	} else {
+		w.RawByte('[')
+		for i, item := range v.Value {
+			if i > 0 {
+				w.RawByte(',')
+			}
+			w.Uint8(item)
 		}
-		w.Uint8(item)
+		w.RawByte(']')
 	}
-	w.RawByte(']')
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.

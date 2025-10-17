@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int64 is an optional int64 type that provides optional semantics without using pointers.
+// Int64 is an optional and nullable int64 type that provides optional semantics without using pointers.
 type Int64 struct {
 	isDefined bool
+	IsPresent bool
 	Value     int64
 }
 
@@ -23,9 +24,28 @@ func (v *Int64) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v Int64) Get(value int64) int64 {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *Int64) Set(value int64) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Int64) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Int64(v.Value)
+	if v.IsPresent {
+		w.Int64(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *Int64) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = Int64{}
 	} else {
 		v.Value = l.Int64()
+		v.IsPresent = true
 	}
 }
 

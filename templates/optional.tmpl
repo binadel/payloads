@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// {{.TypeName}} is an optional {{.GoType}} type that provides optional semantics without using pointers.
+// {{.TypeName}} is an optional and nullable {{.GoType}} type that provides optional semantics without using pointers.
 type {{.TypeName}} struct {
 	isDefined bool
+	IsPresent bool
 	Value     {{.GoType}}
 }
 
@@ -23,9 +24,28 @@ func (v *{{.TypeName}}) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v {{.TypeName}}) Get(value {{.GoType}}) {{.GoType}} {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *{{.TypeName}}) Set(value {{.GoType}}) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v {{.TypeName}}) MarshalEasyJSON(w *jwriter.Writer) {
-	w.{{.WriterMethod}}(v.Value)
+	if v.IsPresent {
+		w.{{.WriterMethod}}(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *{{.TypeName}}) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = {{.TypeName}}{}
 	} else {
 		v.Value = l.{{.LexerMethod}}()
+		v.IsPresent = true
 	}
 }
 

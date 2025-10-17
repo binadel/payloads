@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt64 is an optional uint64 type that provides optional semantics without using pointers.
+// UInt64 is an optional and nullable uint64 type that provides optional semantics without using pointers.
 type UInt64 struct {
 	isDefined bool
+	IsPresent bool
 	Value     uint64
 }
 
@@ -23,9 +24,28 @@ func (v *UInt64) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v UInt64) Get(value uint64) uint64 {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *UInt64) Set(value uint64) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v UInt64) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Uint64(v.Value)
+	if v.IsPresent {
+		w.Uint64(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *UInt64) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = UInt64{}
 	} else {
 		v.Value = l.Uint64()
+		v.IsPresent = true
 	}
 }
 

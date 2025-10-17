@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt64Array is an optional array of uint64 that provides optional semantics without using pointers.
+// UInt64Array is an optional array of uint64 that provides optional semantics.
 type UInt64Array struct {
 	isDefined bool
 	Value     []uint64
@@ -25,14 +25,18 @@ func (v *UInt64Array) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v UInt64Array) MarshalEasyJSON(w *jwriter.Writer) {
-	w.RawByte('[')
-	for i, item := range v.Value {
-		if i > 0 {
-			w.RawByte(',')
+	if v.Value == nil {
+		w.RawString("null")
+	} else {
+		w.RawByte('[')
+		for i, item := range v.Value {
+			if i > 0 {
+				w.RawByte(',')
+			}
+			w.Uint64(item)
 		}
-		w.Uint64(item)
+		w.RawByte(']')
 	}
-	w.RawByte(']')
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.

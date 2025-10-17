@@ -48,8 +48,8 @@ func (v *{{.TypeName}}) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Skip()
 		*v = {{.TypeName}}{}
 	} else {
-		v.IsPresent = true
 		v.Value = l.{{.LexerMethod}}()
+		v.IsPresent = true
 	}
 }
 

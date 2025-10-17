@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// String is an optional string type that provides optional semantics without using pointers.
+// String is an optional and nullable string type that provides optional semantics without using pointers.
 type String struct {
 	isDefined bool
+	IsPresent bool
 	Value     string
 }
 
@@ -23,9 +24,28 @@ func (v *String) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v String) Get(value string) string {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *String) Set(value string) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v String) MarshalEasyJSON(w *jwriter.Writer) {
-	w.String(v.Value)
+	if v.IsPresent {
+		w.String(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *String) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = String{}
 	} else {
 		v.Value = l.String()
+		v.IsPresent = true
 	}
 }
 

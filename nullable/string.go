@@ -48,8 +48,8 @@ func (v *String) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Skip()
 		*v = String{}
 	} else {
-		v.IsPresent = true
 		v.Value = l.String()
+		v.IsPresent = true
 	}
 }
 

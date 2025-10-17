@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt32 is an optional uint32 type that provides optional semantics without using pointers.
+// UInt32 is an optional and nullable uint32 type that provides optional semantics without using pointers.
 type UInt32 struct {
 	isDefined bool
+	IsPresent bool
 	Value     uint32
 }
 
@@ -23,9 +24,28 @@ func (v *UInt32) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v UInt32) Get(value uint32) uint32 {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *UInt32) Set(value uint32) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v UInt32) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Uint32(v.Value)
+	if v.IsPresent {
+		w.Uint32(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *UInt32) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = UInt32{}
 	} else {
 		v.Value = l.Uint32()
+		v.IsPresent = true
 	}
 }
 

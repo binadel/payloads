@@ -48,8 +48,8 @@ func (v *Int8) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Skip()
 		*v = Int8{}
 	} else {
-		v.IsPresent = true
 		v.Value = l.Int8()
+		v.IsPresent = true
 	}
 }
 

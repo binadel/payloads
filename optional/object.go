@@ -6,8 +6,8 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Object is an optional object type for providing optional semantics.
-// The generic argument should be of type any struct
+// Object is an optional and nullable object type for providing optional semantics.
+// The generic argument should be of type pointer to any struct
 // that implements easyjson marshaler and unmarshaler interfaces.
 type Object[T easyjson.MarshalerUnmarshaler] struct {
 	isDefined bool
@@ -28,7 +28,11 @@ func (v *Object[T]) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Object[T]) MarshalEasyJSON(w *jwriter.Writer) {
-	v.Value.MarshalEasyJSON(w)
+	if any(v.Value) == nil {
+		w.RawString("null")
+	} else {
+		v.Value.MarshalEasyJSON(w)
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.

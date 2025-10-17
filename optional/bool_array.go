@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// BoolArray is an optional array of bool that provides optional semantics without using pointers.
+// BoolArray is an optional array of bool that provides optional semantics.
 type BoolArray struct {
 	isDefined bool
 	Value     []bool
@@ -25,14 +25,18 @@ func (v *BoolArray) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v BoolArray) MarshalEasyJSON(w *jwriter.Writer) {
-	w.RawByte('[')
-	for i, item := range v.Value {
-		if i > 0 {
-			w.RawByte(',')
+	if v.Value == nil {
+		w.RawString("null")
+	} else {
+		w.RawByte('[')
+		for i, item := range v.Value {
+			if i > 0 {
+				w.RawByte(',')
+			}
+			w.Bool(item)
 		}
-		w.Bool(item)
+		w.RawByte(']')
 	}
-	w.RawByte(']')
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.

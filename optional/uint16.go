@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt16 is an optional uint16 type that provides optional semantics without using pointers.
+// UInt16 is an optional and nullable uint16 type that provides optional semantics without using pointers.
 type UInt16 struct {
 	isDefined bool
+	IsPresent bool
 	Value     uint16
 }
 
@@ -23,9 +24,28 @@ func (v *UInt16) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v UInt16) Get(value uint16) uint16 {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *UInt16) Set(value uint16) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v UInt16) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Uint16(v.Value)
+	if v.IsPresent {
+		w.Uint16(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *UInt16) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = UInt16{}
 	} else {
 		v.Value = l.Uint16()
+		v.IsPresent = true
 	}
 }
 

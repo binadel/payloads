@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Float64 is an optional float64 type that provides optional semantics without using pointers.
+// Float64 is an optional and nullable float64 type that provides optional semantics without using pointers.
 type Float64 struct {
 	isDefined bool
+	IsPresent bool
 	Value     float64
 }
 
@@ -23,9 +24,28 @@ func (v *Float64) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v Float64) Get(value float64) float64 {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *Float64) Set(value float64) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Float64) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Float64(v.Value)
+	if v.IsPresent {
+		w.Float64(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *Float64) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = Float64{}
 	} else {
 		v.Value = l.Float64()
+		v.IsPresent = true
 	}
 }
 

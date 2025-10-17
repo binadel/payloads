@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// UInt8 is an optional uint8 type that provides optional semantics without using pointers.
+// UInt8 is an optional and nullable uint8 type that provides optional semantics without using pointers.
 type UInt8 struct {
 	isDefined bool
+	IsPresent bool
 	Value     uint8
 }
 
@@ -23,9 +24,28 @@ func (v *UInt8) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v UInt8) Get(value uint8) uint8 {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *UInt8) Set(value uint8) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v UInt8) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Uint8(v.Value)
+	if v.IsPresent {
+		w.Uint8(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *UInt8) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = UInt8{}
 	} else {
 		v.Value = l.Uint8()
+		v.IsPresent = true
 	}
 }
 

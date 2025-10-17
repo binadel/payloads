@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// StringArray is an optional array of string that provides optional semantics without using pointers.
+// StringArray is an optional array of string that provides optional semantics.
 type StringArray struct {
 	isDefined bool
 	Value     []string
@@ -25,14 +25,18 @@ func (v *StringArray) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v StringArray) MarshalEasyJSON(w *jwriter.Writer) {
-	w.RawByte('[')
-	for i, item := range v.Value {
-		if i > 0 {
-			w.RawByte(',')
+	if v.Value == nil {
+		w.RawString("null")
+	} else {
+		w.RawByte('[')
+		for i, item := range v.Value {
+			if i > 0 {
+				w.RawByte(',')
+			}
+			w.String(item)
 		}
-		w.String(item)
+		w.RawByte(']')
 	}
-	w.RawByte(']')
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.

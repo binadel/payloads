@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int16Array is an optional array of int16 that provides optional semantics without using pointers.
+// Int16Array is an optional array of int16 that provides optional semantics.
 type Int16Array struct {
 	isDefined bool
 	Value     []int16
@@ -25,14 +25,18 @@ func (v *Int16Array) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Int16Array) MarshalEasyJSON(w *jwriter.Writer) {
-	w.RawByte('[')
-	for i, item := range v.Value {
-		if i > 0 {
-			w.RawByte(',')
+	if v.Value == nil {
+		w.RawString("null")
+	} else {
+		w.RawByte('[')
+		for i, item := range v.Value {
+			if i > 0 {
+				w.RawByte(',')
+			}
+			w.Int16(item)
 		}
-		w.Int16(item)
+		w.RawByte(']')
 	}
-	w.RawByte(']')
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.

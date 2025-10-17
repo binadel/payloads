@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int16 is an optional int16 type that provides optional semantics without using pointers.
+// Int16 is an optional and nullable int16 type that provides optional semantics without using pointers.
 type Int16 struct {
 	isDefined bool
+	IsPresent bool
 	Value     int16
 }
 
@@ -23,9 +24,28 @@ func (v *Int16) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v Int16) Get(value int16) int16 {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *Int16) Set(value int16) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Int16) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Int16(v.Value)
+	if v.IsPresent {
+		w.Int16(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *Int16) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = Int16{}
 	} else {
 		v.Value = l.Int16()
+		v.IsPresent = true
 	}
 }
 

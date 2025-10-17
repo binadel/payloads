@@ -5,7 +5,7 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Float64Array is an optional array of float64 that provides optional semantics without using pointers.
+// Float64Array is an optional array of float64 that provides optional semantics.
 type Float64Array struct {
 	isDefined bool
 	Value     []float64
@@ -25,14 +25,18 @@ func (v *Float64Array) SetDefined() {
 
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Float64Array) MarshalEasyJSON(w *jwriter.Writer) {
-	w.RawByte('[')
-	for i, item := range v.Value {
-		if i > 0 {
-			w.RawByte(',')
+	if v.Value == nil {
+		w.RawString("null")
+	} else {
+		w.RawByte('[')
+		for i, item := range v.Value {
+			if i > 0 {
+				w.RawByte(',')
+			}
+			w.Float64(item)
 		}
-		w.Float64(item)
+		w.RawByte(']')
 	}
-	w.RawByte(']')
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.

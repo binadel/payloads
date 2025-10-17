@@ -5,9 +5,10 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int is an optional int type that provides optional semantics without using pointers.
+// Int is an optional and nullable int type that provides optional semantics without using pointers.
 type Int struct {
 	isDefined bool
+	IsPresent bool
 	Value     int
 }
 
@@ -23,9 +24,28 @@ func (v *Int) SetDefined() {
 	v.isDefined = true
 }
 
+// Get returns the value if not null; otherwise returns the default given.
+func (v Int) Get(value int) int {
+	if v.IsPresent {
+		return v.Value
+	} else {
+		return value
+	}
+}
+
+// Set stores the value and sets it as not null.
+func (v *Int) Set(value int) {
+	v.IsPresent = true
+	v.Value = value
+}
+
 // MarshalEasyJSON does JSON marshaling using easyjson interface.
 func (v Int) MarshalEasyJSON(w *jwriter.Writer) {
-	w.Int(v.Value)
+	if v.IsPresent {
+		w.Int(v.Value)
+	} else {
+		w.RawString("null")
+	}
 }
 
 // UnmarshalEasyJSON does JSON unmarshaling using easyjson interface.
@@ -35,6 +55,7 @@ func (v *Int) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		*v = Int{}
 	} else {
 		v.Value = l.Int()
+		v.IsPresent = true
 	}
 }
 

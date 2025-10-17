@@ -48,8 +48,8 @@ func (v *Int64) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Skip()
 		*v = Int64{}
 	} else {
-		v.IsPresent = true
 		v.Value = l.Int64()
+		v.IsPresent = true
 	}
 }
 
