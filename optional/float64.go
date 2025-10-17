@@ -5,26 +5,24 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Float64 is an optional and nullable float64 type that provides optional semantics without using pointers.
+// Float64 is a container for float64 type that provides optional semantics without using pointers.
 type Float64 struct {
 	isDefined bool
 	IsPresent bool
 	Value     float64
 }
 
-// IsDefined returns whether the value is defined.
-// It is used by easyjson when the field has omitempty tag,
-// to decide whether to include the field or not.
+// IsDefined determines whether this field should be included in the json output, if it has the omitempty tag.
 func (v Float64) IsDefined() bool {
 	return v.isDefined
 }
 
-// SetDefined sets the isDefined to true.
+// SetDefined sets the field to defined, see IsDefined.
 func (v *Float64) SetDefined() {
 	v.isDefined = true
 }
 
-// Get returns the value if not null; otherwise returns the default given.
+// Get returns the value if it is not null, otherwise it returns the given default value.
 func (v Float64) Get(value float64) float64 {
 	if v.IsPresent {
 		return v.Value

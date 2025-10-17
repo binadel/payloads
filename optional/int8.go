@@ -5,26 +5,24 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Int8 is an optional and nullable int8 type that provides optional semantics without using pointers.
+// Int8 is a container for int8 type that provides optional semantics without using pointers.
 type Int8 struct {
 	isDefined bool
 	IsPresent bool
 	Value     int8
 }
 
-// IsDefined returns whether the value is defined.
-// It is used by easyjson when the field has omitempty tag,
-// to decide whether to include the field or not.
+// IsDefined determines whether this field should be included in the json output, if it has the omitempty tag.
 func (v Int8) IsDefined() bool {
 	return v.isDefined
 }
 
-// SetDefined sets the isDefined to true.
+// SetDefined sets the field to defined, see IsDefined.
 func (v *Int8) SetDefined() {
 	v.isDefined = true
 }
 
-// Get returns the value if not null; otherwise returns the default given.
+// Get returns the value if it is not null, otherwise it returns the given default value.
 func (v Int8) Get(value int8) int8 {
 	if v.IsPresent {
 		return v.Value
