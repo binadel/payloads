@@ -6,8 +6,8 @@ import (
 	"github.com/mailru/easyjson/jwriter"
 )
 
-// Array is an optional and nullable array type for providing optional semantics.
-// The generic argument should be of type pointer to any struct
+// Array is a container for slice type that provides optional semantics without using pointers.
+// The generic argument T must be of type pointer to any struct
 // that implements easyjson marshaler and unmarshaler interfaces.
 type Array[T easyjson.MarshalerUnmarshaler] struct {
 	isDefined bool
@@ -15,14 +15,12 @@ type Array[T easyjson.MarshalerUnmarshaler] struct {
 	New       func() T
 }
 
-// IsDefined returns whether the value is defined.
-// It is used by easyjson when the field has omitempty tag,
-// to decide whether to include the field or not.
+// IsDefined determines whether this field should be included in the json output, if it has the omitempty tag.
 func (v Array[T]) IsDefined() bool {
 	return v.isDefined
 }
 
-// SetDefined sets the isDefined to true.
+// SetDefined sets the field to defined, see IsDefined.
 func (v *Array[T]) SetDefined() {
 	v.isDefined = true
 }
@@ -49,12 +47,12 @@ func (v *Array[T]) UnmarshalEasyJSON(l *jlexer.Lexer) {
 		l.Skip()
 		*v = Array[T]{}
 	} else {
+		if v.New == nil {
+			panic("Cannot instantiate generic type from nil constructor, set New function to define the constructor")
+		}
 		v.Value = make([]T, 0)
 		l.Delim('[')
 		for !l.IsDelim(']') {
-			if v.New == nil {
-				panic("Cannot instantiate item for Array[T] from nil constructor, use New to define the constructor")
-			}
 			item := v.New()
 			if l.IsNull() {
 				l.Skip()
